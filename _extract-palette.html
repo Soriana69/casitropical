@@ -1,0 +1,52 @@
+<!doctype html>
+<html><body style="margin:0;background:#222;color:white;font-family:monospace;padding:20px">
+<h2>Logo new (playita)</h2>
+<img id="logo" crossorigin="anonymous" src="https://drive.google.com/thumbnail?id=1KYM6OfJd6plsEPFMqf8r3M26hH6dDCyW&sz=w1200" style="max-width:600px;display:block;background:#444"/>
+<canvas id="cv" width="200" height="200" style="display:none"></canvas>
+<pre id="out">Loading...</pre>
+<script>
+const img = document.getElementById('logo');
+img.onload = () => {
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  cv.width = 200; cv.height = Math.round(200 * img.naturalHeight/img.naturalWidth);
+  ctx.drawImage(img, 0, 0, cv.width, cv.height);
+  try {
+    const data = ctx.getImageData(0,0,cv.width,cv.height).data;
+    // bucket colors
+    const buckets = {};
+    for (let i=0;i<data.length;i+=4){
+      const a = data[i+3]; if (a < 128) continue;
+      const r = Math.round(data[i]/24)*24;
+      const g = Math.round(data[i+1]/24)*24;
+      const b = Math.round(data[i+2]/24)*24;
+      const k = `${r},${g},${b}`;
+      buckets[k] = (buckets[k]||0)+1;
+    }
+    const top = Object.entries(buckets).sort((a,b)=>b[1]-a[1]).slice(0,15);
+    document.getElementById('out').textContent = 
+      `Size: ${img.naturalWidth}x${img.naturalHeight}\n\nTop colors (rgb : count):\n` +
+      top.map(([k,c])=>{
+        const [r,g,b] = k.split(',').map(Number);
+        const hex = '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+        return `${hex}  rgb(${k})  — ${c}`;
+      }).join('\n');
+    // visual swatches
+    const sw = document.createElement('div');
+    sw.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin-top:20px';
+    top.forEach(([k,c])=>{
+      const d = document.createElement('div');
+      const [r,g,b] = k.split(',').map(Number);
+      const hex = '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+      d.style.cssText=`width:80px;height:80px;background:${hex};color:#000;font-size:10px;padding:4px;text-shadow:0 0 2px white`;
+      d.textContent = hex;
+      sw.appendChild(d);
+    });
+    document.body.appendChild(sw);
+  } catch(e){
+    document.getElementById('out').textContent = 'CORS error: ' + e.message;
+  }
+};
+img.onerror = () => document.getElementById('out').textContent = 'Image load failed';
+</script>
+</body></html>
