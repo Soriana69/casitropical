@@ -148,6 +148,14 @@
     .show-row .show-venue { font-size:16px; }
     .show-row .show-status { justify-self:start; }
   }
+  
+  /* Videoclip Banner responsive */
+  @media (max-width: 900px) {
+    .videoclip-circle { display:none !important; }
+  }
+  @media (max-width: 768px) {
+    .videoclip-grid { grid-template-columns:1fr !important; gap:40px !important; }
+  }
 
   /* Historia button styles */
   .btn-history {
@@ -602,6 +610,13 @@ const Lightbox = ({ photo, onClose, onPrev, onNext }) => {
 // ============== HERO ==============
 const Hero = ({ openImage }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = React.useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+
+  React.useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <section style={{
@@ -640,8 +655,8 @@ const Hero = ({ openImage }) => {
         </nav>
       </div>
 
-    <div style={{position:'relative',zIndex:2,display:'grid',gridTemplateColumns:'1.2fr .9fr',gap:'4vw',alignItems:'center'}}>
-      <div>
+    <div style={{position:'relative',zIndex:2,display:'grid',gridTemplateColumns:isMobile?'1fr':'1.2fr .9fr',gap:'4vw',alignItems:'center'}}>
+      <div style={{width:'100%'}}>
         <div className="mono" style={{fontSize:12,letterSpacing:'.3em',color:'var(--accent)',marginBottom:18}}>
           <span style={{background:'transparent',color:'var(--ink)',padding:'0',fontWeight:700,letterSpacing:'.25em',border:'2px solid var(--ink)',display:'inline-block',padding:'6px 12px'}}>✦ YA DISPONIBLE</span>
         </div>
@@ -655,16 +670,39 @@ const Hero = ({ openImage }) => {
         </h1>
         <p className="serif-it" style={{
           fontSize:'clamp(18px,2.2vw,28px)',
-          maxWidth:560,marginTop:24,lineHeight:1.4,opacity:.85
+          maxWidth:560,marginTop:24,lineHeight:1.4,opacity:.85,marginBottom:isMobile?28:24
         }}>
           La prueba viviente de que se puede hacer música de playa y desamor desde el Estado de México. <em>"Casi"</em> porque era mucho compromiso ser totalmente Tropical.
         </p>
+        
+        {isMobile && (
+          <div style={{position:'relative',marginBottom:28,width:'100%',maxWidth:260}}>
+            <div 
+              onClick={() => openImage(data.coverNiElNiYo)}
+              style={{
+              position:'relative',
+              background:`url("${data.coverNiElNiYo}") center/cover`,
+              border:'4px solid var(--ink)',
+              boxShadow:'12px 12px 0 var(--accent)',
+              aspectRatio:'4/5',
+              cursor:'pointer',transition:'opacity .2s'
+            }}
+            onMouseEnter={e=>e.currentTarget.style.opacity='0.85'}
+            onMouseLeave={e=>e.currentTarget.style.opacity='1'}
+            ></div>
+            <div style={{position:'absolute',bottom:-25,right:-25,zIndex:2}}>
+              <Stamp rot={-8} size={95} color="var(--ink)" bg="var(--accent3)">Ya<br/>disponible</Stamp>
+            </div>
+          </div>
+        )}
+        
         <div style={{display:'flex',gap:14,marginTop:32,flexWrap:'wrap'}}>
           <a href="#musica" style={btnPrimary}>♥  Escuchar ahora</a>
           <a href="#historia" style={btnGhost}>Conoce la banda →</a>
         </div>
       </div>
 
+      {!isMobile && (
       <div style={{position:'relative',aspectRatio:'1',width:'100%'}}>
         <div 
           onClick={() => openImage(data.coverNiElNiYo)}
@@ -685,6 +723,7 @@ const Hero = ({ openImage }) => {
           <Stamp rot={-12} size={155} color="var(--ink)" bg="var(--accent3)">Ya<br/>disponible</Stamp>
         </div>
       </div>
+      )}
     </div>
 
     <div style={{position:'relative',zIndex:3,marginTop:'auto'}}>
@@ -853,6 +892,49 @@ const PlatformLink = ({name, symbol, href}) => (
     <span>↗</span>
   </a>
 );
+
+// ============== VIDEOCLIP BANNER ==============
+const VideoclipBanner = () => {
+  const [isMobile, setIsMobile] = React.useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+  
+  React.useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return (
+  <section style={{padding:'80px 4vw',background:'var(--accent2)',color:'var(--cream)',position:'relative',overflow:'hidden'}}>
+    <div style={{position:'absolute',top:-60,right:-60,width:400,height:400,borderRadius:'50%',border:'2px dashed currentColor',opacity:.1,animation:'spinSlow 80s linear infinite',pointerEvents:'none',display:isMobile?'none':'block'}}></div>
+    <div style={{maxWidth:'1400px',margin:'0 auto',position:'relative',zIndex:2}}>
+      <div style={{display:'grid',gridTemplateColumns:isMobile?'1fr':'1fr 1.1fr',gap:isMobile?'40px':'60px',alignItems:'center'}}>
+        <div>
+          <a href="https://youtu.be/L1qMHfm7X1s" target="_blank" rel="noopener" style={{display:'block',borderRadius:'12px',overflow:'hidden',boxShadow:'0 20px 60px rgba(0,0,0,.4)',border:'3px solid var(--cream)',position:'relative',cursor:'pointer',transition:'transform .3s ease',textDecoration:'none'}} 
+          onMouseEnter={e=>{e.currentTarget.style.transform='scale(1.02)'}}
+          onMouseLeave={e=>{e.currentTarget.style.transform='scale(1)'}}>
+            <img src="https://img.youtube.com/vi/L1qMHfm7X1s/maxresdefault.jpg" alt="Ni el Ni Yo - Miniatura" style={{width:'100%',height:'auto',display:'block'}}/>
+            <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,.3)',transition:'background .3s ease'}}>
+              <div style={{width:80,height:80,borderRadius:'50%',background:'var(--cream)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:40}}>▶</div>
+            </div>
+          </a>
+        </div>
+        <div>
+          <div className="mono" style={{fontSize:11,letterSpacing:'.3em',textTransform:'uppercase',marginBottom:20,opacity:.8}}>🎬 AHORA DISPONIBLE</div>
+          <h2 className="display" style={{fontSize:'clamp(42px,7vw,72px)',lineHeight:.9,margin:'0 0 24px',color:'var(--cream)'}}>
+            Videoclip<br/><span style={{color:'var(--accent3)'}}>Ni el Ni Yo</span>
+          </h2>
+          <p style={{fontSize:18,lineHeight:1.7,opacity:.95,marginBottom:32}}>
+            Ya está disponible el videoclip oficial de nuestro sencillo en YouTube. Dale play y que disfrutes.
+          </p>
+          <a href="https://youtu.be/L1qMHfm7X1s" target="_blank" rel="noopener" style={{...btnPrimary,background:'var(--cream)',color:'var(--accent2)',borderColor:'var(--cream)'}}>
+            Ver en YouTube →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  );
+};
 
 // ============== HISTORIA ==============
 const Historia = ({ openImage }) => (
@@ -1624,6 +1706,7 @@ function App(){
       <TickerStrip items={['Ni el Ni Yo · Ya disponible','Escucha en Spotify','Casi Tropical','Indie de las playas de Cuautitlán','Estado de México']} />
       <Musica openImage={openImage} />
       <SongHistory />
+      <VideoclipBanner />
       <Historia openImage={openImage} />
       <Historia2 openImage={openImage} />
       <Miembros />
