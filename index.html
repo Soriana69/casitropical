@@ -597,7 +597,7 @@ const Lightbox = ({ photo, onClose, onPrev, onNext }) => {
 };
 
 // ============== HERO ==============
-const Hero = () => {
+const Hero = ({ openImage }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -663,15 +663,21 @@ const Hero = () => {
       </div>
 
       <div style={{position:'relative',aspectRatio:'1',width:'100%'}}>
-        <div style={{
+        <div 
+          onClick={() => openImage(data.coverNiElNiYo)}
+          style={{
           position:'absolute',inset:0,
           background:`url("${data.coverNiElNiYo}") center/cover`,
           border:'3px solid var(--ink)',
           boxShadow:'14px 14px 0 var(--accent)',
           transform:'rotate(2deg)',
           animation:'bobGentle 6s ease-in-out infinite',
-          '--rot':'2deg'
-        }}></div>
+          '--rot':'2deg',
+          cursor:'pointer',transition:'opacity .2s'
+        }}
+        onMouseEnter={e=>e.currentTarget.style.opacity='0.85'}
+        onMouseLeave={e=>e.currentTarget.style.opacity='1'}
+        ></div>
         <div style={{position:'absolute',bottom:-40,right:-40,zIndex:2}}>
           <Stamp rot={-12} size={155} color="var(--ink)" bg="var(--accent3)">Ya<br/>disponible</Stamp>
         </div>
@@ -699,16 +705,24 @@ const btnGhost = {
 };
 
 // ============== MÚSICA ==============
-const Musica = () => (
+const Musica = ({ openImage }) => (
   <section id="musica" style={{padding:'80px 4vw 60px',position:'relative',background:'var(--ink)',color:'var(--bg)'}}>
     <SectionLabel num="01" label="Lanzamientos" inverted />
     <div style={{display:'grid',gridTemplateColumns:'1fr 1.1fr',gap:'5vw',alignItems:'center',marginTop:40}}>
       <div style={{position:'relative'}}>
-        <img src={data.coverNiElNiYo} alt="Ni el Ni Yo - Casi Tropical" style={{
+        <img 
+          src={data.coverNiElNiYo} 
+          alt="Ni el Ni Yo - Casi Tropical" 
+          onClick={() => openImage(data.coverNiElNiYo)}
+          style={{
           width:'100%',display:'block',
           border:'3px solid var(--bg)',
-          boxShadow:'18px 18px 0 var(--accent)'
-        }}/>
+          boxShadow:'18px 18px 0 var(--accent)',
+          cursor:'pointer',transition:'opacity .2s'
+        }}
+        onMouseEnter={e=>e.currentTarget.style.opacity='0.85'}
+        onMouseLeave={e=>e.currentTarget.style.opacity='1'}
+        />
         <div style={{position:'absolute',top:-18,right:-18,
           background:'var(--accent3)',color:'var(--ink)',
           padding:'8px 14px',fontFamily:"'DM Mono',monospace",fontSize:11,letterSpacing:'.2em',
@@ -838,7 +852,7 @@ const PlatformLink = ({name, symbol, href}) => (
 );
 
 // ============== HISTORIA ==============
-const Historia = () => (
+const Historia = ({ openImage }) => (
   <section id="historia" style={{padding:'100px 4vw',position:'relative'}}>
     <SectionLabel num="02" label="Acerca de la banda" />
 
@@ -859,12 +873,21 @@ const Historia = () => (
       </div>
 
       <div style={{position:'relative',aspectRatio:'4/5'}}>
-        <img src={data.bandPhoto} alt="Casi Tropical banda" style={{
+        <img 
+          src={data.bandPhoto} 
+          alt="Casi Tropical banda" 
+          onClick={() => openImage(data.bandPhoto)}
+          style={{
           width:'100%',height:'100%',objectFit:'cover',display:'block',
           border:'3px solid var(--ink)',
           filter:'sepia(.2) contrast(1.05) saturate(1.05)',
-          boxShadow:'18px 18px 0 var(--accent3)'
-        }}/>
+          boxShadow:'18px 18px 0 var(--accent3)',
+          cursor:'pointer',transition:'opacity .2s'
+        }}
+        onMouseEnter={e=>e.currentTarget.style.opacity='0.85'}
+        onMouseLeave={e=>e.currentTarget.style.opacity='1'}
+        />
+        
         <div className="mono" style={{
           position:'absolute',bottom:-14,right:-14,
           background:'var(--accent3)',color:'var(--ink)',
@@ -895,19 +918,28 @@ const PhotoPlaceholder = ({ label, aspectRatio='4/5', rot=0, accent='var(--accen
   </div>
 );
 
-const Chapter = ({ num, kicker, title, children, photos, layout='right' }) => {
+const Chapter = ({ num, kicker, title, children, photos, layout='right', openImage }) => {
   const photosCol = (
     <div style={{display:'flex',flexDirection:'column',gap:24,position:'relative'}}>
       {photos.map((p,i)=>(
         <div key={i} style={{position:'relative'}}>
           {p.real ? (
-            <img src={p.src} alt={p.label} style={{
+            <img 
+              src={p.src} 
+              alt={p.label} 
+              onClick={() => openImage && openImage(p.src)}
+              style={{
               width:'100%',display:'block',
               border:'2px solid var(--ink)',
               filter:'sepia(.15) contrast(1.05)',
               transform:`rotate(${p.rot||0}deg)`,
-              boxShadow:'8px 8px 0 var(--accent3)'
-            }}/>
+              boxShadow:'8px 8px 0 var(--accent3)',
+              cursor: openImage ? 'pointer' : 'default',
+              transition:'opacity .2s'
+            }}
+            onMouseEnter={e=>openImage && (e.currentTarget.style.opacity='0.85')}
+            onMouseLeave={e=>openImage && (e.currentTarget.style.opacity='1')}
+            />
           ) : (
             <PhotoPlaceholder label={p.label} aspectRatio={p.aspect||'4/5'} rot={p.rot||0} accent={p.accent||'var(--accent)'} />
           )}
@@ -951,7 +983,7 @@ const Chapter = ({ num, kicker, title, children, photos, layout='right' }) => {
   );
 };
 
-const Historia2 = () => (
+const Historia2 = ({ openImage }) => (
   <section style={{padding:'120px 6vw',background:'var(--cream)',color:'var(--ink)',position:'relative',borderTop:'2px solid var(--ink)',borderBottom:'2px solid var(--ink)'}}>
     <div className="mono" style={{display:'flex',gap:16,alignItems:'center',fontSize:11,letterSpacing:'.3em',textTransform:'uppercase',opacity:.65}}>
       <span style={{width:32,height:32,borderRadius:'50%',border:'1.5px solid currentColor',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11}}>03</span>
@@ -971,6 +1003,7 @@ const Historia2 = () => (
       kicker="Inicios · La obsesión vintage"
       title="Beto se obsesiona con lo vintage."
       layout="right"
+      openImage={openImage}
       photos={[
         {real:true, src:'assets/historia/01-beto-bandas-previas.png', rot:-2, caption:'Beto en sus bandas previas · Cuautitlán'}
       ]}
@@ -988,6 +1021,7 @@ const Historia2 = () => (
       kicker="El click · Una noche en el karaoke"
       title="El click pasa en un karaoke."
       layout="left"
+      openImage={openImage}
       photos={[
         {real:true, src:'assets/historia/02-beto-karaoke.png', rot:1, caption:'Karaoke · la noche del click'}
       ]}
@@ -1005,6 +1039,7 @@ const Historia2 = () => (
       kicker="Junio 2025 · El primer sí"
       title="Llega Dilan, y la banda existe."
       layout="right"
+      openImage={openImage}
       photos={[
         {real:true, src:'assets/dilan-cara.jpg', rot:-3, caption:'Dilan Hernández · batería'}
       ]}
@@ -1022,6 +1057,7 @@ const Historia2 = () => (
       kicker="Verano 2025 · El primer ensayo"
       title="Había más caca de perro que cables."
       layout="left"
+      openImage={openImage}
       photos={[
         {real:true, src:'assets/historia/03-ensayo-mala-muerte.png', rot:-2, caption:'sala de mala muerte · verano 2025'},
         {real:true, src:'assets/historia/04-anuncio-guitarrista.png', rot:2, caption:'"se solicita guitarrista rítmico" · el anuncio'}
@@ -1043,6 +1079,7 @@ const Historia2 = () => (
       kicker="Otoño 2025 · Llega Tomás y trae el espacio"
       title="Llega Tomás, y con él el Estudio."
       layout="right"
+      openImage={openImage}
       photos={[
         {real:true, src:'assets/tom-cara.jpg', rot:-3, caption:'Tomás Ortiz · guitarra'},
         {real:true, src:'assets/historia/05-estudio-tropical-inicios.png', rot:2, caption:'Estudio Tropical · inicios'},
@@ -1062,6 +1099,7 @@ const Historia2 = () => (
       kicker="Beto Fest · El primer tokín de verdad"
       title="Tocan en el patio de Beto. Pasa algo."
       layout="left"
+      openImage={openImage}
       photos={[
         {real:true, src:'assets/historia/07-flyer-betofest.png', rot:-1, caption:'Beto Fest Vol. 8 · 9 ago 2025 · flyer'},
         {real:true, src:'assets/historia/08-betofest-tocada.png', rot:2, caption:'el primer tokín · patio de Beto'},
@@ -1084,6 +1122,7 @@ const Historia2 = () => (
       kicker="Fin de 2025 · Cambio de guitarra"
       title="Rocko se va. Sin malas vibras."
       layout="right"
+      openImage={openImage}
       photos={[
         {real:true, src:'assets/historia/13-comunicado-rocko.png', rot:1, caption:'comunicado oficial · dic 2025'},
         {real:true, src:'assets/historia/14-beto-rocko-diego.png', rot:-2, caption:'Beto, Rocko y Diego · sin roces'}
@@ -1105,6 +1144,7 @@ const Historia2 = () => (
       kicker="Inicio 2026 · La pieza que faltaba"
       title="Llega Diego, y la alineación cierra."
       layout="left"
+      openImage={openImage}
       photos={[
         {real:true, src:'assets/diego-cara.jpg', rot:-3, caption:'Diego Colín · guitarra'}
       ]}
@@ -1122,6 +1162,7 @@ const Historia2 = () => (
       kicker="Hoy · Estudio Tropical, el sencillo, el EP"
       title="Inauguran el Estudio. Sale Ni el Ni Yo."
       layout="right"
+      openImage={openImage}
       photos={[
         {real:true, src:'https://drive.google.com/thumbnail?id=1iN-AaD6E8Z-L8ExaqGbpez1eujykZkmx&sz=w1200', rot:-2, caption:'Ni el Ni Yo · portada'},
         {real:true, src:'assets/historia/15-inauguracion-estudio.png', rot:2, caption:'inauguración Estudio Tropical · casi fans & amigos'}
@@ -1246,8 +1287,8 @@ const Miembros = () => (
 );
 
 // ============== FOTOS ==============
-const Fotos = () => {
-  const photos = [
+const Fotos = ({ openImage, allImages }) => {
+  const fotosDisplay = [
     {src:data.bandPhoto, caption:'Sesión Abril', year:'2026', rot:-3},
     {src:'assets/beto-cara.jpg', caption:'Beto', year:'2026', rot:2},
     {src:'assets/tomas-cara.jpg', caption:'Tomás', year:'2026', rot:-2},
@@ -1263,10 +1304,6 @@ const Fotos = () => {
     {src:'assets/historia/06-ensayo-inicios.png', caption:'Ensayo · inicios', year:'2025', rot:-2},
     {src:'assets/historia/09-beto-abner-soler.png', caption:'Beto & Abner Soler', year:'2025', rot:2}
   ];
-  const [openIdx, setOpenIdx] = React.useState(null);
-  const close = ()=>setOpenIdx(null);
-  const prev  = ()=>setOpenIdx(i => (i - 1 + photos.length) % photos.length);
-  const next  = ()=>setOpenIdx(i => (i + 1) % photos.length);
   return (
     <section id="fotos" style={{padding:'100px 4vw',position:'relative',background:'var(--ink)',color:'var(--bg)',overflow:'hidden'}}>
       <SectionLabel num="05" label="Galería · Pin-Ups & Tokines" inverted />
@@ -1275,8 +1312,8 @@ const Fotos = () => {
       </h2>
 
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))',gap:'32px 24px'}}>
-        {photos.map((p,i)=>(
-          <PinUpFrame key={i} src={p.src} rot={p.rot} caption={p.caption} year={p.year} onClick={()=>setOpenIdx(i)} />
+        {fotosDisplay.map((p,i)=>(
+          <PinUpFrame key={i} src={p.src} rot={p.rot} caption={p.caption} year={p.year} onClick={()=>openImage(p.src)} />
         ))}
       </div>
 
@@ -1285,45 +1322,44 @@ const Fotos = () => {
           MÁS FOTOS PRÓXIMAMENTE · ¿NOS VISTE EN UN TOKIN? MÁNDANOSLAS A → <span style={{color:'var(--accent3)'}}>casitropicalnegocios@gmail.com</span>
         </p>
       </div>
-      <Lightbox photo={openIdx!==null?photos[openIdx]:null} onClose={close} onPrev={prev} onNext={next} />
     </section>
   );
 };
 
-// ============== SHOWS ==============
 const Shows = () => {
   const shows = [
-    {date:'08 NOV 25', city:'Izcalli', venue:'El Taller', status:'TOCADO ✓', past:true},
-    {date:'05 DIC 25', city:'CDMX', venue:'Foro independiente', status:'TOCADO ✓', past:true},
-    {date:'14 JUN 26', city:'CDMX', venue:'El Taller', status:'BOLETOS'},
-    {date:'12 JUL 26', city:'Estado de México', venue:'Estudio Tropical', status:'PRÓXIMAMENTE'},
-    {date:'TBA', city:'¿Tu ciudad?', venue:'Escríbenos', status:'BOOKING'}
+    {date:'TBA', city:'Próxima fecha', venue:'Por confirmar', status:'PENDIENTE'},
+    {date:'TBA', city:'Próxima fecha', venue:'Por confirmar', status:'PENDIENTE'},
+    {date:'TBA', city:'Próxima fecha', venue:'Por confirmar', status:'PENDIENTE'}
   ];
   return (
-    <section id="shows" style={{padding:'100px 4vw',position:'relative'}}>
+    <section id="shows" style={{padding:'100px 4vw 140px',position:'relative'}}>
       <SectionLabel num="06" label="En vivo" />
-      <h2 className="display" style={{fontSize:'clamp(56px,10vw,160px)',lineHeight:.9,margin:'30px 0 60px'}}>
+      <h2 className="display" style={{fontSize:'clamp(48px,8vw,120px)',lineHeight:.9,margin:'30px 0 60px'}}>
         Próximas<br/><span style={{color:'var(--accent)'}}>fechas</span>
       </h2>
-      <div>
+      <div style={{maxWidth:'900px'}}>
         {shows.map((s,i)=>(
           <div key={i} className="show-row" style={{
-            padding:'24px 0',borderTop:'1px solid var(--ink)',alignItems:'center',
-            opacity: s.past ? .5 : 1
+            padding:'28px 0',borderTop:'1px solid rgba(90,31,16,.2)',alignItems:'center',
+            opacity: .6
           }}>
-            <span className="display show-date" style={{fontSize:32,color:s.past?'var(--ink)':'var(--accent)'}}>{s.date}</span>
-            <span className="show-city" style={{fontSize:24,fontWeight:600}}>{s.city}</span>
-            <span className="show-venue serif-it" style={{fontStyle:'italic',opacity:.75}}>{s.venue}</span>
+            <span className="display show-date" style={{fontSize:28,color:'var(--accent)'}}>{s.date}</span>
+            <span className="show-city" style={{fontSize:20,fontWeight:600}}>{s.city}</span>
+            <span className="show-venue serif-it" style={{fontStyle:'italic',opacity:.65}}>{s.venue}</span>
             <span className="mono show-status" style={{
               padding:'8px 16px',border:'1.5px solid var(--ink)',
-              fontSize:11,letterSpacing:'.2em',textTransform:'uppercase',fontWeight:600,
-              background: s.status==='BOLETOS'?'var(--ink)':'transparent',
-              color: s.status==='BOLETOS'?'var(--bg)':'var(--ink)'
+              fontSize:10,letterSpacing:'.2em',textTransform:'uppercase',fontWeight:600,
+              background:'transparent',
+              color:'var(--ink)'
             }}>{s.status}</span>
           </div>
         ))}
-        <div style={{borderTop:'1px solid var(--ink)'}}></div>
+        <div style={{borderTop:'1px solid rgba(90,31,16,.2)'}}></div>
       </div>
+      <p className="mono" style={{marginTop:32,fontSize:11,letterSpacing:'.2em',opacity:.6}}>
+        ✋ Estamos preparando las fechas. Escríbenos si quieres que tocara en tu ciudad.
+      </p>
     </section>
   );
 };
@@ -1360,19 +1396,19 @@ const Estudio = () => (
 
 // ============== CONTACTO ==============
 const Contacto = () => (
-  <section id="contacto" style={{padding:'100px 4vw',background:'var(--accent)',color:'var(--cream)',position:'relative',overflow:'hidden'}}>
+  <section id="contacto" style={{padding:'100px 4vw 140px',background:'var(--accent)',color:'var(--cream)',position:'relative'}}>
     <SectionLabel num="08" label="Contacto" inverted />
-    <div style={{display:'grid',gridTemplateColumns:'1.3fr 1fr',gap:'5vw',alignItems:'flex-end',marginTop:40}}>
-      <h2 className="display" style={{fontSize:'clamp(56px,11vw,200px)',lineHeight:.85,margin:0}}>
+    <div style={{display:'grid',gridTemplateColumns:'1.2fr 1.2fr',gap:'6vw',alignItems:'flex-start',marginTop:40,maxWidth:'1200px'}}>
+      <h2 className="display" style={{fontSize:'clamp(42px,8vw,140px)',lineHeight:.9,margin:0,wordBreak:'break-word'}}>
         Escríbenos<br/><span style={{color:'var(--accent3)'}}>aunque sea</span><br/>para saludar.
       </h2>
-      <div style={{fontSize:18,lineHeight:1.7}}>
-        <p style={{margin:'0 0 24px'}}>
+      <div style={{fontSize:18,lineHeight:1.8,minWidth:0}}>
+        <p style={{margin:'0 0 28px',wordBreak:'break-word'}}>
           Booking, prensa, colaboraciones, foro Estudio Tropical, o nomás para mandar un meme. Todo se lee.
         </p>
-        <div style={{display:'grid',gap:14,fontFamily:"'DM Mono',monospace",fontSize:14}}>
-          <a href="mailto:casitropicalnegocios@gmail.com" style={contactLink}>→ casitropicalnegocios@gmail.com</a>
-          <a href="https://instagram.com/casitropical" target="_blank" rel="noopener" style={contactLink}>→ Instagram @casitropical</a>
+        <div style={{display:'grid',gap:16,fontFamily:"'DM Mono',monospace",fontSize:14}}>
+          <a href="mailto:casitropicalnegocios@gmail.com" style={{...contactLink,wordBreak:'break-all'}}>→ casitropicalnegocios@gmail.com</a>
+          <a href="https://instagram.com/casitropical" target="_blank" rel="noopener" style={{...contactLink,wordBreak:'break-word'}}>→ Instagram @casitropical</a>
         </div>
       </div>
     </div>
@@ -1474,13 +1510,13 @@ const ScrollTopButton = () => {
 
   return (
     <div style={{
-      position:'fixed',right:20,bottom:20,zIndex:1002,
-      width:62,height:62,padding:4,borderRadius:'50%',
-      background:`conic-gradient(var(--accent3) ${progress}%, rgba(255,255,255,.16) ${progress}% 100%)`,
+      position:'fixed',right:16,bottom:16,zIndex:1002,
+      width:48,height:48,padding:3,borderRadius:'50%',
+      background:`conic-gradient(var(--accent3) ${progress}%, rgba(255,255,255,.08) ${progress}% 100%)`,
       display:'grid',placeItems:'center',
-      opacity: visible ? 1 : 0,
-      transform: visible ? 'translateY(0)' : 'translateY(16px)',
-      transition:'opacity .25s ease, transform .25s ease',
+      opacity: visible ? 0.7 : 0,
+      transform: visible ? 'translateY(0)' : 'translateY(12px)',
+      transition:'opacity .3s ease, transform .3s ease',
       pointerEvents: visible ? 'auto' : 'none'
     }}>
       <button
@@ -1488,13 +1524,13 @@ const ScrollTopButton = () => {
         onClick={handleClick}
         aria-label="Subir al inicio"
         style={{
-          width:'100%',height:'100%',borderRadius:'50%',border:'2px solid var(--ink)',
-          background:'var(--ink)',color:'var(--bg)',fontSize:24,fontWeight:700,
-          cursor:'pointer',display:'grid',placeItems:'center',boxShadow:'0 12px 24px rgba(0,0,0,.2)',
-          transition:'transform .2s ease'
+          width:'100%',height:'100%',borderRadius:'50%',border:'1.5px solid var(--ink)',
+          background:'var(--ink)',color:'var(--bg)',fontSize:18,fontWeight:700,
+          cursor:'pointer',display:'grid',placeItems:'center',boxShadow:'0 6px 12px rgba(0,0,0,.15)',
+          transition:'transform .2s ease, opacity .2s ease'
         }}
-        onMouseEnter={e=>e.currentTarget.style.transform='scale(1.05)'}
-        onMouseLeave={e=>e.currentTarget.style.transform='scale(1)'}
+        onMouseEnter={e=>{e.currentTarget.style.transform='scale(1.08)';e.currentTarget.parentElement.style.opacity=1}}
+        onMouseLeave={e=>{e.currentTarget.style.transform='scale(1)';e.currentTarget.parentElement.style.opacity=0.7}}
       >
         ↑
       </button>
@@ -1507,6 +1543,35 @@ function App(){
   const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
   const [showTweaks, setShowTweaks] = useState(false);
   const [loaderVisible, setLoaderVisible] = useState(true);
+  const [globalLightboxOpen, setGlobalLightboxOpen] = useState(null);
+  
+  // Galería global con todas las imágenes del sitio
+  const allImages = [
+    {src:data.coverNiElNiYo, caption:'Ni el Ni Yo', year:'Portada'},
+    {src:data.bandPhoto, caption:'Sesión Abril', year:'2026'},
+    {src:'assets/historia/01-beto-bandas-previas.png', caption:'Beto en sus bandas previas', year:'Cuautitlán'},
+    {src:'assets/historia/02-beto-karaoke.png', caption:'Karaoke', year:'la noche del click'},
+    {src:'assets/dilan-cara.jpg', caption:'Dilan Hernández', year:'batería'},
+    {src:'assets/historia/03-ensayo-mala-muerte.png', caption:'sala de mala muerte', year:'verano 2025'},
+    {src:'assets/historia/04-anuncio-guitarrista.png', caption:'"se solicita guitarrista rítmico"', year:'el anuncio'},
+    {src:'assets/tom-cara.jpg', caption:'Tomás Ortiz', year:'guitarra'},
+    {src:'assets/historia/05-estudio-tropical-inicios.png', caption:'Estudio Tropical', year:'inicios'},
+    {src:'assets/historia/06-ensayo-inicios.png', caption:'casi tropical ensayando', year:''},
+    {src:'assets/historia/07-flyer-betofest.png', caption:'Beto Fest Vol. 8', year:'9 ago 2025'},
+    {src:'assets/historia/08-betofest-tocada.png', caption:'el primer tokín', year:'patio de Beto'},
+    {src:'assets/historia/09-beto-abner-soler.png', caption:'Beto + Abner Soler', year:'ese día'},
+    {src:'assets/historia/10-taller-payaso-1.png', caption:'El Taller', year:'Izcalli · nov 2025'},
+    {src:'assets/historia/11-taller-payaso-2.png', caption:'la banda en El Taller', year:''},
+    {src:'assets/historia/12-naucalpan-corbata.png', caption:'tokada privada', year:'Naucalpan'},
+    {src:'assets/diego-cara.jpg', caption:'Diego Colín', year:'guitarra'},
+    {src:'assets/historia/13-comunicado-rocko.png', caption:'comunicado oficial', year:'dic 2025'},
+    {src:'assets/historia/14-beto-rocko-diego.png', caption:'Beto, Rocko y Diego', year:'sin roces'},
+    {src:'assets/historia/15-inauguracion-estudio.png', caption:'inauguración Estudio Tropical', year:'Abr 2026'},
+    {src:'assets/beto-cara.jpg', caption:'Beto', year:'2026'},
+    {src:'assets/tomas-cara.jpg', caption:'Tomás', year:'2026'},
+    {src:'assets/diego-cara2.jpg', caption:'Diego', year:'2026'},
+    {src:data.flyerTaller, caption:'El Taller', year:'Nov 2025'}
+  ];
 
   const setTweak = (key, val) => {
     setTweaks(t=>{
@@ -1540,22 +1605,32 @@ function App(){
     try{ window.parent.postMessage({type:'__edit_mode_dismissed'}, '*'); }catch(e){}
   };
 
+  const openImage = (src) => {
+    const idx = allImages.findIndex(img => img.src === src);
+    setGlobalLightboxOpen(idx >= 0 ? idx : 0);
+  };
+
+  const closeLightbox = () => setGlobalLightboxOpen(null);
+  const prevImage = () => setGlobalLightboxOpen(i => (i - 1 + allImages.length) % allImages.length);
+  const nextImage = () => setGlobalLightboxOpen(i => (i + 1) % allImages.length);
+
   return (
     <>
       <Loader visible={loaderVisible} />
-      <Hero />
+      <Hero openImage={openImage} />
       <TickerStrip items={['Ni el Ni Yo · Ya disponible','Escucha en Spotify','Casi Tropical','Indie de las playas de Cuautitlán','Estado de México']} />
-      <Musica />
+      <Musica openImage={openImage} />
       <SongHistory />
-      <Historia />
-      <Historia2 />
+      <Historia openImage={openImage} />
+      <Historia2 openImage={openImage} />
       <Miembros />
-      <Fotos />
+      <Fotos openImage={openImage} allImages={allImages} />
       <Shows />
       <Estudio />
       <Contacto />
       <Footer />
       <ScrollTopButton />
+      {globalLightboxOpen !== null && <Lightbox photo={allImages[globalLightboxOpen]} onClose={closeLightbox} onPrev={prevImage} onNext={nextImage} />}
       {showTweaks && <TweaksPanel tweaks={tweaks} setTweak={setTweak} onClose={closeTweaks} />}
     </>
   );
