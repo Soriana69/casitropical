@@ -10,8 +10,11 @@
 <meta property="og:description" content="Escucha en Spotify el nuevo sencillo Ni el Ni Yo de Casi Tropical. Disponible ahora." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://casitropical.com" />
-<meta property="og:image" content="https://drive.google.com/thumbnail?id=1iN-AaD6E8Z-L8ExaqGbpez1eujykZkmx&sz=w1600" />
+<meta property="og:image" content="https://casitropical.com/assets/logo-casi-tropical.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="1200" />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://casitropical.com/assets/logo-casi-tropical.png" />
 <link rel="canonical" href="https://casitropical.com" />
 <link rel="icon" href="assets/logo-casi-tropical.png" type="image/png" />
 
@@ -21,7 +24,7 @@
   "@type": "MusicGroup",
   "name": "Casi Tropical",
   "url": "https://casitropical.com",
-  "image": "https://drive.google.com/thumbnail?id=1hXPV86iE2gY6m65c43lxXYnM9ds2pcZ1&sz=w2000",
+  "image": "https://casitropical.com/assets/logo-casi-tropical.png",
   "genre": ["Indie", "Tropical", "Indie Mexicano", "Balada"],
   "foundingLocation": {"@type":"Place","name":"Cuautitlán, Estado de México"},
   "foundingDate": "2025-06",
@@ -176,7 +179,7 @@
   .song-history .display { margin-bottom:18px; text-align:center; color:var(--ink); }
   .song-history img { max-width:520px; width:100%; border-radius:6px; display:block; margin:0 auto 28px; border:4px solid var(--ink); box-shadow:12px 12px 0 var(--accent); }
   .song-history p { font-size:18px; line-height:1.85; color:var(--ink); text-align:justify; text-justify:inter-word; margin-bottom:16px; opacity:.95; }
-  .song-history p.lead { font-weight:700; color:var(--accent3); margin-bottom:20px; }
+  .song-history p.lead { font-weight:700; color:var(--accent3); margin-bottom:20px; text-shadow: 2px 2px 4px rgba(90,31,16,.5), -1px -1px 3px rgba(255,255,255,.6), 1px 1px 2px rgba(0,0,0,.3); background:rgba(255,255,255,.15); padding:16px 20px; border-radius:6px; }
   .song-history p.lead::first-letter { font-size:56px; float:left; line-height:1; margin-right:10px; font-weight:800; color:var(--accent); font-family:'Lilita One',sans-serif; }
   @media (max-width:640px) {
     .song-history p.lead::first-letter { font-size:40px; }
@@ -1366,13 +1369,13 @@ const Shows = () => {
 
 // ============== ESTUDIO ==============
 const Estudio = () => (
-  <section style={{padding:'100px 4vw',background:'var(--accent2)',color:'var(--cream)',position:'relative',overflow:'hidden'}}>
+  <section style={{padding:'100px 4vw',background:'var(--accent2)',color:'var(--cream)',position:'relative'}}>
     <div style={{position:'absolute',top:30,right:-80,width:300,height:300,
       borderRadius:'50%',border:'2px dashed currentColor',opacity:.2,
-      animation:'spinSlow 60s linear infinite'}}></div>
+      animation:'spinSlow 60s linear infinite',pointerEvents:'none'}}></div>
 
     <SectionLabel num="07" label="Estudio Tropical" inverted />
-    <div style={{display:'grid',gridTemplateColumns:'1.3fr 1fr',gap:'5vw',alignItems:'center',marginTop:40}}>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1.2fr',gap:'5vw',alignItems:'center',marginTop:40,maxWidth:'1400px'}}>
       <div>
         <h2 className="display" style={{fontSize:'clamp(48px,8vw,130px)',lineHeight:.85,margin:'0 0 24px'}}>
           La cuna de<br/>Casi Tropical,<br/><span style={{color:'var(--accent3)'}}>ahora abierta.</span>
@@ -1385,7 +1388,7 @@ const Estudio = () => (
         </p>
         <a href="https://www.instagram.com/estudio_tropical_/" target="_blank" rel="noopener" style={{...btnPrimary,background:'var(--cream)',color:'var(--accent2)',borderColor:'var(--cream)',marginTop:32}}>Reservar Estudio Tropical →</a>
       </div>
-      <div style={{position:'relative'}}>
+      <div style={{position:'relative',display:'flex',alignItems:'center',justifyContent:'center',minHeight:300}}>
         <Stamp rot={-8} color="var(--cream)" size={240}>
           Estudio<br/>Tropical<br/>· EDOMEX ·
         </Stamp>
